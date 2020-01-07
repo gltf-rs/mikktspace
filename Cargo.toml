@@ -18,5 +18,8 @@ travis-ci = { repository = "gltf-rs/mikktspace" }
 [dependencies]
 nalgebra = "0.18.0"
 
+[features]
+experimental = []
+
 [[example]]
 name = "generate"

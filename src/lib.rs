@@ -45,8 +45,23 @@ pub trait Geometry {
 }
 
 /// Default (recommended) Angular Threshold is 180 degrees, which means threshold disabled.
+#[cfg(feature = "experimental")]
 pub fn generate_tangents_default<I: Geometry>(geometry: &mut I) -> bool {
     unsafe { generated::genTangSpace(geometry, 180.0) }
+}
+
+#[cfg(not(feature = "experimental"))]
+/// Default (recommended) Angular Threshold is 180 degrees, which means threshold disabled.
+pub fn generate_tangents_default<I: Geometry>(_: &mut I) -> bool {
+    panic!(
+        "This version of `mikktspace` has not been widely tested and is under a feature guard.\n\
+        Please enable the `\"experimental\"` feature to use it:\n\
+        \n\
+        mikktspace = { version = \"..\", features = [\"experimental\"] }\n\
+        \n\
+        See <https://github.com/gltf-rs/mikktspace/issues/16> for more information.\
+        "
+    );
 }
 
 fn get_position<I: Geometry>(geometry: &mut I, index: usize) -> Vector3<f32> {
