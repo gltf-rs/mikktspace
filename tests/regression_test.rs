@@ -83,8 +83,7 @@ impl Geometry for Context {
         &mut self,
         tangent: [f32; 3],
         bi_tangent: [f32; 3],
-        mag_s: f32,
-        mag_t: f32,
+        [mag_s, mag_t]: [f32; 2],
         bi_tangent_preserves_orientation: bool,
         face: usize,
         vert: usize,
@@ -206,9 +205,9 @@ fn make_cube() -> Mesh {
         let n: Vector3<f32> = p.coords.normalize();
         let t: Point2<f32> = pt.uv.into();
         vertices.push(Vertex {
-            position: (p / 2.0).into(),
-            normal: n.into(),
-            tex_coord: t.into(),
+            position: p / 2.0,
+            normal: n,
+            tex_coord: t,
         });
     }
 
@@ -221,8 +220,7 @@ fn cube_tangents_should_equal_reference_values() {
         mesh: make_cube(),
         results: Vec::new(),
     };
-    let ret = generate_tangents(&mut context);
-    assert_eq!(true, ret);
+    assert!(generate_tangents(&mut context));
 
     let expected_results: Vec<Result> = vec![
         Result::new(
